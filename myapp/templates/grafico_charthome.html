@@ -1,0 +1,192 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.min.js"
+      integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+      crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-v4-grid-only@1.0.0/dist/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+   
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Veterinaria Sebastian - Graficos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    
+    <style>
+        body {
+            background-color: #f1b717;
+        }
+        .navbar {
+            background-color: transparent;
+        }
+        .navbar.bg-light {
+            background-color: #f8f9fa;
+        }
+        .navbar-nav .nav-link {
+            color: #000;
+        }
+        .content-section h1 {
+            color: white;
+            font-weight: bold;
+        }
+
+
+        .card {
+      width: 300px;
+      height: 300px; /* Adjust based on your needs */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      }
+
+      .card-img-top {
+          max-height: 300px;
+          max-width: 300px;
+          width: auto;
+          height: auto;
+          display: block;
+          margin: 0 auto; /* Centers the image when it's not full width */
+      }
+
+      .card-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+    </style>
+
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-sm bg-light" data-bs-theme="dark">
+        <div class="container-fluid">
+          <a class="navbar-brand mx-auto" href="/">
+            <img src="https://nanolog.vteximg.com.br/arquivos/logo.svg?v=637478030064200000" alt="Logo" height="70" style="height:90px;">
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled"></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- Content -->
+      <div class="container my-5 bg-color content-section text-sm-start">
+        <div class="text-center mx-auto">
+          <p class="text-start display-6">Graficos </p>
+          
+          <div class="container mt-5">
+            <div class="row justify-content-center">
+                <!-- Row 1 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <a href="{% url 'charting_vtaxmediopago' %}">
+                          <img src="{% static 'images/medio_pago.png' %}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">Ventas por Medio de Pago</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <a href="{% url 'charting_vtaxvend' %}">
+                          <img src="{% static 'images/vendedor.png' %}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">Ventas por Vendedor</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <a href="{% url 'charting_vtaxperiodo' %}">
+                          <img src="{% static 'images/ventas_periodo.png' %}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">Ventas por Mes</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                  <div class="card">
+                      <a href="{% url 'charting_listadosaldos' %}">
+                        <img src="{% static 'images/saldos_icono.png' %}" class="card-img-top" alt="...">
+                          <div class="card-body">
+                              <h5 class="card-title">Listado de Saldos</h5>
+                          </div>
+                      </a>
+                  </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                  <div class="card">
+                      <a href="{% url 'charting_vtaxdia' %}">
+                        <img src="{% static 'images/venta_diaria_icono.jpg' %}" class="card-img-top" alt="...">
+                          <div class="card-body">
+                              <h5 class="card-title">Ventas por Dia</h5>
+                          </div>
+                      </a>
+                  </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                  <div class="card">
+                      <a href="{% url 'charting_rankingxcliente' %}">
+                        <img src="{% static 'images/ranking_clientes.png' %}" class="card-img-top" alt="...">
+                          <div class="card-body">
+                              <h5 class="card-title">Ranking por cliente</h5>
+                          </div>
+                      </a>
+                  </div>
+                </div>
+
+            </div>
+          </div>
+          
+       
+
+            </div>
+          </div>   
+  
+  
+    	<!-- Footer -->
+	<footer class="bg-dark text-center text-white py-1 fixed-bottom">
+		<p>&copy; 2023 SOFT54. All rights reserved.</p>
+	</footer>
+
+	<!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0"></script>
+
+</body>
+</html>

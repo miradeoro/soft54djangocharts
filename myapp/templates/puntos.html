@@ -1,0 +1,82 @@
+<!doctype html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Veterinaria Sebastian - Sistema de Puntos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f1b717;
+        }
+        .navbar {
+            background-color: transparent;
+        }
+        .navbar.bg-light {
+            background-color: #f8f9fa;
+        }
+        .navbar-nav .nav-link {
+            color: #000;
+        }
+        .content-section h1 {
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-sm bg-light" data-bs-theme="dark">
+        <div class="container-fluid">
+          <a class="navbar-brand mx-auto" href="/">
+            <img src="https://nanolog.vteximg.com.br/arquivos/logo.svg?v=637478030064200000" alt="Logo" height="90" style="height:90px;">
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled"></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      
+      <!-- Content -->
+      <div class="container my-5 bg-color content-section text-sm-start">
+        <div class="text-center mx-auto">
+          <p class="text-start display-6">TUS PUNTOS SON:</p>
+          <h3 id="puntos" class="fw-bold text-white display-1 text-start">Obtenidos: {{ puntos_disponibles }}</h3>
+          <h3 id="puntos" class="fw-bold text-white display-1 text-start">Utilizados: {{ puntos_utilizados }}</h3>
+          <h3 id="puntos" class="fw-bold text-white display-1 text-start">Disponibles: {{ puntos_formula }}</h3>
+          <h4 class="text-start">{{ hoy_formateado }}
+          
+          </h4>
+          <div class="d-flex flex-column align-items-center mx-auto">
+          </div>
+        </div>
+      </div>
+      
+
+
+	<!-- Footer -->
+	<footer class="bg-dark text-center text-white py-3 fixed-bottom">
+		<p>&copy; 2023 SOFT54. All rights reserved.</p>
+	</footer>
+
+	<!-- Bootstrap JS -->
+  
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0"></script>
+
+ 

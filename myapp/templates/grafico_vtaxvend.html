@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.min.js"
+      integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+      crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-v4-grid-only@1.0.0/dist/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+   
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Veterinaria Sebastian - Graficos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f1b717;
+        }
+        .navbar {
+            background-color: transparent;
+        }
+        .navbar.bg-light {
+            background-color: #f8f9fa;
+        }
+        .navbar-nav .nav-link {
+            color: #000;
+        }
+        .content-section h1 {
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-sm bg-light" data-bs-theme="dark">
+        <div class="container-fluid">
+          <a class="navbar-brand mx-auto" href="/charts">
+            <img src="https://nanolog.vteximg.com.br/arquivos/logo.svg?v=637478030064200000" alt="Logo" height="70" style="height:90px;">
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled"></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- Content -->
+      <div class="container my-5 bg-color content-section text-sm-start">
+        <div class="text-center mx-auto">
+          <p class="text-start display-6">Graficos - Venta por Vendedor</p>
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8">
+       
+
+            </div>
+          </div>   
+
+
+        <div class="container mt-5">
+          <div class="row">
+              <div class="col-md-3">
+                  <label for="fromDate" class="form-label">Desde:</label>
+                  <input type="text" id="fromDate" name="fromDate" class="form-control" style="text-align:center;">
+              </div>
+              <div class="col-md-3">
+                  <label for="toDate" class="form-label">Hasta:</label>
+                  <input type="text" id="toDate" name="toDate" class="form-control" style="text-align:center;">
+              </div>
+              <div class="col-md-3 align-self-end">
+                  <button id="submitButton" class="btn btn-primary" onclick="callWs()">Enviar</button>
+              </div>
+          </div>
+      </div>
+   
+     
+    <script>
+        $('#fromDate').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: "dd/mm/yy",
+        
+        });
+
+        $('#toDate').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: "dd/mm/yy",
+     
+        });
+
+        
+
+        $(document).ready(function() {
+          $("#submitButton").click(function(){
+            console.log($('#fromDate').val());
+            console.log($('#toDate').val());
+          }); 
+
+        // Hoy
+        var hoy = new Date();
+
+        // Setear desde en datepicker con fecha de hoy
+        $("#toDate").datepicker().datepicker('setDate', hoy);
+
+        // Calcular tres meses para atras
+        var tresmesesatras = new Date(hoy);
+        tresmesesatras.setMonth(hoy.getMonth() - 3);
+
+        //primer dia del mes
+        tresmesesatras.setDate(1); 
+
+        //Setear la fecha en datepicker
+        $("#fromDate").datepicker().datepicker('setDate', tresmesesatras);
+
+
+
+        });
+
+        callWs = function(){
+
+       
+          
+          // The Endpoint URL
+          let url = '/get_vtaxvend_data/';
+          fetch(url+'?'+new URLSearchParams({
+                  from_date: $('#fromDate').val(),
+                  to_date: $('#toDate').val(),
+              }))
+          .then(function(response) {
+            // Render the Response Status
+            //document.getElementById('result').innerHTML = response.status;
+            // Parse the body as JSON
+            return response.json();
+          })
+          .then(function(json) {
+            // Render the parsed body
+            //document.getElementById('result_json').innerHTML = JSON.stringify(json);
+            
+            //Render data in datatable
+            // Assuming you get the JSON response from some API or AJAX request
+            console.log(json.data);
+            console.log(typeof json);
+
+            data=json;
+
+            // Get the table body by its ID
+            var tbody = document.getElementById('tableBody');
+
+            // Clear previous rows
+            tbody.innerHTML = "";
+
+            //variable totales
+            var totales=0;
+
+            // Iterate over the parsed JSON data to create rows
+            for (let i = 0; i < data.labels.length; i++) {
+                var row = tbody.insertRow();
+
+                // Month (Label)
+                var cell1 = row.insertCell(0);
+                cell1.textContent = data.labels[i];
+                
+                // Importe
+                var cell2 = row.insertCell(1);
+                importe=data.data[i]
+
+                //Sumar al total
+                totales=totales+parseFloat(importe);
+
+                //formato Argentina
+                importe=importe.toLocaleString('es-AR', { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 })
+
+                cell2.textContent = importe;
+                
+            }
+
+              //Fila totales
+              var row = tbody.insertRow();
+
+              // Total (Label)
+              var cell3 = row.insertCell(0);
+              cell3.innerHTML="<b>Total</b>"
+
+              // Total (Data)
+              var cell4 = row.insertCell(1);
+
+              //formato Argentina
+              totales=totales.toLocaleString('es-AR', { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 })
+
+              cell4.innerHTML="<b>"+totales+"</b>";
+
+
+            //destroy previous chart if it was there
+            var canvasWrapper = document.getElementById('container');
+            canvasWrapper.innerHTML = '<canvas id="salesChart"></canvas>';
+
+            //render chart
+            var ctx = document.getElementById('salesChart').getContext('2d');
+            
+            // RGB: rgb(0, 0, 139)
+
+            // RGB: rgb(101, 67, 33)
+
+
+            // RGB: rgb(0, 100, 0)
+            // RGB: rgb(128, 0, 0)
+
+            // RGB: rgb(85, 26, 139)
+            
+            var salesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: json.labels,
+                    datasets: [{
+                        label: 'Ventas',
+                        data: json.data,
+                        backgroundColor: ['rgb(2, 119, 189, 0.8)',
+                        'rgb(0, 0, 139,0.8)',
+                        'rgb(101, 67, 33,0.8)',
+                        'rgb(85, 26, 139,0.8)',
+                        'rgb(0, 100, 0,0.8)'], 
+                        borderColor: 'rgba(255, 255, 255, 0.7)', 
+                        borderWidth: 1.5
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        },
+                    responsive:true
+                    }
+                }
+            });
+         
+
+          })
+        }
+    </script>
+
+
+
+    <br>
+   
+    <!-- <br/>
+    <b>Response Status :</b>
+    <div id="result">
+    </div>
+    <br/>
+    <b>JSON Object :</b>
+    <div id="result_json">
+    </div> -->
+
+    
+    <div id="container" style="width: 75%;">
+      <canvas id="salesChart"></canvas>
+    </div>
+
+    <div class="container mt-5">
+        <div class="table-responsive"> <!-- Responsive wrapper -->
+            <table id="dataTable" class="table table-bordered table-hover" style="background-color: rgba(255, 255, 255, 0.831)">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Vendedor</th>
+                        <th>Facturacion</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+  
+  
+    	<!-- Footer -->
+	<footer class="bg-dark text-center text-white py-1 fixed-bottom">
+		<p>&copy; 2023 SOFT54. All rights reserved.</p>
+	</footer>
+
+	<!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0"></script>
+
+</body>
+</html>
