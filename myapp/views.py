@@ -208,7 +208,7 @@ def get_vtaxvend_data(request):
     FechaHasta=convert_date_format(hasta) 
     
 
-    selecttext = "SELECT VEVEAA.dat_nombre AS Vend, SUM(imp_total*dat_signo) AS Total FROM VETOAA"
+    selecttext = "SELECT VEVEAA.dat_nombre AS Vend, SUM(IMP_TOTAL*DAT_SIGNO*IMP_PARIPESO) AS Total FROM VETOAA"
     selecttext += " INNER JOIN VEVEAA on cod_codigo=cod_vendedor"
     selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
     selecttext += " and dat_vercam=1"
@@ -255,7 +255,7 @@ def get_vtaxperiodo_data(request):
     FechaHasta=convert_date_format(hasta) 
     
 
-    selecttext = "SELECT  YEAR(fec_fechacompro)||'/'||LPAD(MONTH(fec_fechacompro),2,'0')  AS MesAno, SUM(VETOAA.imp_total*VETOAA.dat_signo) AS Total"
+    selecttext = "SELECT  YEAR(fec_fechacompro)||'/'||LPAD(MONTH(fec_fechacompro),2,'0')  AS MesAno, SUM(VETOAA.imp_total*VETOAA.dat_signo*VETOAA.imp_paripeso) AS Total"
     selecttext += " FROM VETOAA"
     selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
     selecttext += " GROUP BY  1"
@@ -294,7 +294,7 @@ def get_vtaxdia_data(request):
     FechaHasta=convert_date_format(hasta) 
     
 
-    selecttext = "SELECT  VETOAA.fec_fechacompro as Fecha, sum(VETOAA.imp_total*VETOAA.dat_signo) AS Importe"
+    selecttext = "SELECT  VETOAA.fec_fechacompro as Fecha, sum(VETOAA.imp_total*VETOAA.dat_signo*VETOAA.imp_paripeso) AS Importe"
     selecttext += " FROM VETOAA"
     selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
     selecttext += " GROUP BY VETOAA.fec_fechacompro"
@@ -440,7 +440,7 @@ def get_rankingxcliente_data(request):
     #TODOS los vendedores o uno especifico
     if vendedor_param=="TODOS":
         
-        selecttext = "SELECT FIRST "+limite+" COD_CLIENTE,DAT_RAZONSOCIAL,SUM(IMP_TOTAL*DAT_SIGNO) AS FACTURADO"
+        selecttext = "SELECT FIRST "+limite+" COD_CLIENTE,DAT_RAZONSOCIAL,SUM(IMP_TOTAL*DAT_SIGNO*IMP_PARIPESO) AS FACTURADO"
         selecttext += " FROM VETOAA"
         selecttext += " JOIN veveaa on veveaa.cod_codigo=VETOAA.cod_vendedor"
         selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
@@ -449,7 +449,7 @@ def get_rankingxcliente_data(request):
 
 
     else:     
-        selecttext = "SELECT FIRST "+limite+" COD_CLIENTE,DAT_RAZONSOCIAL,SUM(IMP_TOTAL*DAT_SIGNO) AS FACTURADO"
+        selecttext = "SELECT FIRST "+limite+" COD_CLIENTE,DAT_RAZONSOCIAL,SUM(IMP_TOTAL*DAT_SIGNO*IMP_PARIPESO) AS FACTURADO"
         selecttext += " FROM VETOAA"
         selecttext += " JOIN veveaa on veveaa.cod_codigo=VETOAA.cod_vendedor"
         selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
@@ -609,7 +609,7 @@ def get_listadosaldos_data(request):
         selecttext = "SELECT vedeaa.cod_cliente as Codigo,"
         selecttext += "veclaa.dat_razonsocial as RazonSocial,veclaa.cod_vendedor as Vendedor,"
         selecttext += "veveaa.dat_nombre as NombreVendedor,"
-        selecttext += "sum(vedeaa.dat_signo*vedeaa.dat_saldo) as Saldo"
+        selecttext += "sum(vedeaa.dat_signo*vedeaa.dat_saldo*vedeaa.imp_paripeso) as Saldo"
         selecttext += " FROM vedeaa"
         selecttext += " JOIN veclaa on vedeaa.cod_cliente=veclaa.cod_codigo"
         selecttext += " JOIN veveaa on veveaa.cod_codigo=veclaa.cod_vendedor"
@@ -736,7 +736,7 @@ def chart_dynamic_graph(request):
     FechaHasta=convert_date_format(hasta) 
     
     
-    selecttext = "SELECT VETCAA.dat_tipo AS MEDIOPAGO, SUM(VETCAA.imp_total*VETCAA.dat_signo) AS Total FROM VETCAA"
+    selecttext = "SELECT VETCAA.dat_tipo AS MEDIOPAGO, SUM(VETCAA.imp_total*VETCAA.dat_signo*VETCAA.imp_paripeso) AS Total FROM VETCAA"
     selecttext += " INNER JOIN GZEMAA on VETCAA.cod_ce_empresa=GZEMAA.cod_ce_empresa and gzemaa.dat_vercam=1"
     selecttext += " WHERE VETCAA.dat_tipo<>'ZZZ' and (VETCAA.fec_fechacompro>='"+ FechaDesde  +"' and VETCAA.fec_fechacompro<='"+FechaHasta+"')"
     selecttext += " and GZEMAA.dat_ce_razonsocial='"+Empresa+"'"
