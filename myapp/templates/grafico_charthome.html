@@ -107,16 +107,7 @@
           <div class="container mt-5">
             <div class="row justify-content-center">
                 <!-- Row 1 -->
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <a href="{% url 'charting_vtaxmediopago' %}">
-                          <img src="{% static 'images/medio_pago.png' %}" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Ventas por Medio de Pago</h5>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+                
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <a href="{% url 'charting_vtaxvend' %}">
@@ -170,6 +161,17 @@
                       </a>
                   </div>
                 </div>
+
+                <div class="col-md-4 mb-4">
+                  <div class="card">
+                      <a href="{% url 'charting_vtaxmediopago' %}">
+                        <img src="{% static 'images/medio_pago.png' %}" class="card-img-top" alt="...">
+                          <div class="card-body">
+                              <h5 class="card-title">Ventas por Medio de Pago</h5>
+                          </div>
+                      </a>
+                  </div>
+              </div>
 
             </div>
           </div>
