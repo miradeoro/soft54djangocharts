@@ -108,7 +108,7 @@ def vet_get_puntos_disponibles(cuit:str):
 def vet_get_puntos_utilizados(cuit:str):
     #Puntos Utilizados
     selecttext2 = "SELECT vetoaa.dat_nrocuit,"
-    selecttext2 += "round(sum(stmsaa.imp_importe * stmsaa.dat_signo)) AS Importe,"
+    selecttext2 += "round(sum(stmsaa.imp_importe * stmsaa.dat_signo*stmsaa.imp_paripeso)) AS Importe,"
     selecttext2 += "TO_CHAR(MAX(vetoaa.fec_fechacompro),'%Y%m%d')" 
     selecttext2 += " FROM vetoaa, stmsaa "
     selecttext2 += " WHERE dat_tipcon = 'zzz' "
@@ -564,7 +564,7 @@ def get_listadosaldos_data(request):
         selecttext = "SELECT vedeaa.cod_cliente as Codigo,"
         selecttext += "veclaa.dat_razonsocial as RazonSocial,veclaa.cod_vendedor as Vendedor,"
         selecttext += "veveaa.dat_nombre as NombreVendedor,"
-        selecttext += "sum(vedeaa.dat_signo*vedeaa.dat_saldo) as Saldo"
+        selecttext += "sum(vedeaa.dat_signo*vedeaa.dat_saldo*vedeaa.imp_paripeso) as Saldo"
         selecttext += " FROM vedeaa"
         selecttext += " JOIN veclaa on vedeaa.cod_cliente=veclaa.cod_codigo"
         selecttext += " JOIN veveaa on veveaa.cod_codigo=veclaa.cod_vendedor"
