@@ -242,13 +242,14 @@ def get_vtaxperiodo_data(request):
 
     desde = request.GET.get('from_date')  # Get the "desde" date from the query parameters
     hasta = request.GET.get('to_date')  # Get the "hasta" date from the query parameters
-
+    empresa_elegida=request.GET.get('empresa_seleccionada')
 
     FechaDesde=str(desde)
     FechaHasta=str(hasta)
     
-    print(type(desde))
-    print(desde)
+    #print(type(desde))
+    #print(desde)
+    print(empresa_elegida)
 
     
     FechaDesde=convert_date_format(desde)
@@ -258,6 +259,7 @@ def get_vtaxperiodo_data(request):
     selecttext = "SELECT  YEAR(fec_fechacompro)||'/'||LPAD(MONTH(fec_fechacompro),2,'0')  AS MesAno, SUM(VETOAA.imp_total*VETOAA.dat_signo*VETOAA.imp_paripeso) AS Total"
     selecttext += " FROM VETOAA"
     selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
+    selecttext += " and VETOAA.cod_empresa='"+empresa_elegida+"'"
     selecttext += " GROUP BY  1"
     selecttext += " ORDER BY 1"
 
@@ -317,6 +319,69 @@ def get_vtaxdia_data(request):
         'labels': labels,
         'data': data,
     })
+
+def get_empresas_data(request):
+
+    # Trae cada sub empresa del cliente
+
+    selecttext = "SELECT cod_ce_empresa,dat_ce_razonsocial FROM  GZEMAA"
+    
+
+    resultado=informix_query(selecttext)
+    #print(resultado)
+
+    try:
+        #print(resultado)
+        #opcion TODAS
+        empresa=["TODAS"]
+        
+        cod_empresa=resultado['cod_ce_empresa'].values.tolist()
+        resultado=resultado['dat_ce_razonsocial'].values.tolist()
+
+        for emp in resultado:
+            empresa.append(emp)
+        
+
+    except:
+        empresa=[]
+        cod_empresa=[]
+     
+    return JsonResponse({
+        'empresa': empresa,
+        'codigo_empresa': cod_empresa,
+        
+        
+    })
+
+
+def get_sucursales_data(request):
+
+    # Trae cada sucursal del cliente
+    #To do :Empresa=GET etc
+    
+    empresa_elegida=request.GET.get('empresa_seleccionada')
+
+    selecttext = "SELECT GZEMAA.cod_ce_empresa,DAT_EMPRESA FROM GZSUAA"
+    selecttext +=" INNER JOIN GZEMAA on GZSUAA.cod_ce_empresa=GZEMAA.cod_ce_empresa "
+    selecttext +=" WHERE GZEMAA.cod_ce_empresa='"+empresa_elegida+"' and GZSUAA.dat_vercam='1'"
+    
+
+    resultado=informix_query(selecttext)
+
+    try:
+        #print(resultado)
+        sucursal=["TODAS"]
+        sucursal=sucursal.append(resultado['DAT_EMPRESA'].values.tolist())
+        
+
+    except:
+        sucursal=[]
+     
+    return JsonResponse({
+        'sucursal': sucursal,
+        
+    })
+
 
 
 def get_listadosaldos_data_vendedores(request):

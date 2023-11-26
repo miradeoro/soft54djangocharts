@@ -35,6 +35,51 @@
             font-weight: bold;
         }
     </style>
+ 
+    <script>
+      // Traer empresas,sucursales
+      document.addEventListener("DOMContentLoaded", function() {
+        fetch('/get_empresas_data')
+          .then(response => response.json())
+          .then(data => populateDropdown(data))
+          .catch(error => console.log('Error fetching data:', error));
+
+        // fetch('/get_sucursales_data')
+        //   .then(response => response.json())
+        //   .then(data => populatetextbox(data))
+        //   .catch(error => console.log('Error fetching data:', error));
+      });
+
+      // Function to populate the dropdown
+      function populateDropdown(data) {
+        const dropdown = document.getElementById('empresaslist');
+        const empresaArray = data.empresa;
+        //agregar la opcion TODOS
+        //const dropdownItemTodos = document.createElement('option');
+        //dropdownItemTodos.text="TODOS";
+        //dropdownItemTodos.value = "TODOS";
+        //dropdown.appendChild(dropdownItemTodos);
+
+        console.log(empresaArray);
+        //0=Todas
+        index=1
+
+        empresaArray.forEach(entry => {
+          const dropdownItem = document.createElement('option');
+          dropdownItem.text=entry;
+          dropdownItem.value = data.codigo_empresa[index];
+          //dropdownItem.dataset.id = entry.codigo;
+          dropdown.appendChild(dropdownItem);
+          index=index+1
+        });
+
+        
+        
+
+      }
+
+
+    </script>
 
 
 </head>
@@ -77,10 +122,33 @@
        
 
             </div>
-          </div>   
-
-
+          </div>
+          
         <div class="container mt-5">
+
+          <div class="row"> 
+              
+            <div class="col-md-3">
+              <div class="dropdown">
+                <label for="dropempresas" class="form-label">Empresa:</label>
+                <select class="form-select" id="empresaslist" name="dropempresas" style="width: 250px;">
+                  <!-- Options will be populated here -->
+              </select>
+            </div> 
+
+            
+              <div class="dropdown">
+                <label for="dropsucursales" class="form-label">Sucursal:</label>
+                <select class="form-select" id="sucursaleslist" name="dropsucursales" style="width: 250px;">
+                  <!-- Options will be populated here -->
+              </select>
+            </div> 
+
+          </div>
+
+        </div>  
+        <div class="container mt-5">
+          
           <div class="row">
               <div class="col-md-3">
                   <label for="fromDate" class="form-label">Desde:</label>
@@ -148,9 +216,12 @@
           
           // The Endpoint URL
           let url = '/get_vtaxperiodo_data/';
+          //dropdown empresas
+          dropdown_emp = document.getElementById('empresaslist');
           fetch(url+'?'+new URLSearchParams({
                   from_date: $('#fromDate').val(),
                   to_date: $('#toDate').val(),
+                  empresa_seleccionada: dropdown_emp.value,
               }))
           .then(function(response) {
             // Render the Response Status

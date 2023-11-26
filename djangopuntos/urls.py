@@ -38,6 +38,9 @@ urlpatterns = [
     path('get_listadosaldos_data_clientes/', get_listadosaldos_data_clientes, name='get_vtaxperiodo_data_clientes'),
 
     path('get_vtaxdia_data/', get_vtaxdia_data, name='get_vtaxdia_data'),
+    
+    path('get_empresas_data/', get_empresas_data, name='get_empresas_data'),
+    path('get_sucursales_data/', get_sucursales_data, name='get_sucursales_data')
 
 
 
