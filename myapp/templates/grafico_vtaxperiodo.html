@@ -100,18 +100,21 @@
   function populateDropdownSucursales(data){
     const dropdown = document.getElementById('sucursaleslist');
     dropdown.innerHTML = "";
-    const sucursalArray = data.sucursal;
-    
-    console.log(sucursalArray);
-    
-    sucursalArray.forEach(entry => {
-      const dropdownItem = document.createElement('option');
-      dropdownItem.text=entry;
-      //dropdownItem.value = data.numero_sucursal;
-      dropdown.appendChild(dropdownItem);
-      
-    });
 
+    const sucursalnombres_Array=data.sucursal;
+    const sucursalcodigos_Array=data.numero_sucursal;
+
+    for (let i = 0; i < sucursalnombres_Array.length; i++) {
+            const dropdownItem = document.createElement('option');
+            dropdownItem.text=sucursalnombres_Array[i];
+            dropdownItem.value = sucursalcodigos_Array[i];
+            dropdown.appendChild(dropdownItem);
+      }
+    
+    //console.log(sucursalnombres_Array);
+    
+
+    
   }
   
 
@@ -256,10 +259,12 @@
           let url = '/get_vtaxperiodo_data/';
           //dropdown empresas
           dropdown_emp = document.getElementById('empresaslist');
+          dropdown_suc = document.getElementById('sucursaleslist');
           fetch(url+'?'+new URLSearchParams({
                   from_date: $('#fromDate').val(),
                   to_date: $('#toDate').val(),
                   empresa_seleccionada: dropdown_emp.value,
+                  sucursal_seleccionada: dropdown_suc.value,
               }))
           .then(function(response) {
             // Render the Response Status

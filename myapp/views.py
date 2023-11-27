@@ -243,6 +243,7 @@ def get_vtaxperiodo_data(request):
     desde = request.GET.get('from_date')  # Get the "desde" date from the query parameters
     hasta = request.GET.get('to_date')  # Get the "hasta" date from the query parameters
     empresa_elegida=request.GET.get('empresa_seleccionada')
+    sucursal_elegida=request.GET.get('sucursal_seleccionada')
 
     FechaDesde=str(desde)
     FechaHasta=str(hasta)
@@ -258,8 +259,10 @@ def get_vtaxperiodo_data(request):
 
     selecttext = "SELECT  YEAR(fec_fechacompro)||'/'||LPAD(MONTH(fec_fechacompro),2,'0')  AS MesAno, SUM(VETOAA.imp_total*VETOAA.dat_signo*VETOAA.imp_paripeso) AS Total"
     selecttext += " FROM VETOAA"
+    selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa"
     selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
     selecttext += " and VETOAA.cod_empresa='"+empresa_elegida+"'"
+    selecttext += " and GZSUAA.nro_sucursal='"+sucursal_elegida+"'"
     selecttext += " GROUP BY  1"
     selecttext += " ORDER BY 1"
 
@@ -375,14 +378,14 @@ def get_sucursales_data(request):
         sucursal=resultado['dat_empresa'].values.tolist()
         
         #nro_sucursal=["TODAS"]   
-        #nro_sucursal=nro_sucursal.append(resultado['nro_sucursal'].values.tolist())
+        nro_sucursal=resultado['nro_sucursal'].values.tolist()
     except:
         sucursal=[]
-        #nro_sucursal=[]
+        nro_sucursal=[]
         
     print("sucu",sucursal)
     return JsonResponse({
-        #'numero_sucursal': nro_sucursal,
+        'numero_sucursal': nro_sucursal,
         'sucursal': sucursal,
         
     })
