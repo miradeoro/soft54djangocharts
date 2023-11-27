@@ -1,0 +1,10 @@
+djangopuntos/__pycache__/
+djangopuntos/myapp/__pycache__/
+*.pyc
+djangopuntos/__pycache__/__init__.cpython-39.pyc
+djangopuntos/__pycache__/__init__.cpython-39.pyc
+djangopuntos/__pycache__/__init__.cpython-39.pyc
+djangopuntos/__pycache__/settings.cpython-39.pyc
+myapp/__pycache__/models.cpython-39.pyc
+myapp/migrations/__pycache__/__init__.cpython-39.pyc
+myapp/__pycache__/views.cpython-39.pyc
