@@ -361,7 +361,8 @@ def get_sucursales_data(request):
     
     empresa_elegida=request.GET.get('empresa_seleccionada')
 
-    selecttext = "SELECT GZEMAA.cod_ce_empresa,DAT_EMPRESA FROM GZSUAA"
+    print(empresa_elegida)
+    selecttext = "SELECT GZSUAA.nro_sucursal,DAT_EMPRESA FROM GZSUAA"
     selecttext +=" INNER JOIN GZEMAA on GZSUAA.cod_ce_empresa=GZEMAA.cod_ce_empresa "
     selecttext +=" WHERE GZEMAA.cod_ce_empresa='"+empresa_elegida+"' and GZSUAA.dat_vercam='1'"
     
@@ -369,15 +370,19 @@ def get_sucursales_data(request):
     resultado=informix_query(selecttext)
 
     try:
-        #print(resultado)
-        sucursal=["TODAS"]
-        sucursal=sucursal.append(resultado['DAT_EMPRESA'].values.tolist())
+        print(resultado)
+        #sucursal=["TODAS"]
+        sucursal=resultado['dat_empresa'].values.tolist()
         
-
+        #nro_sucursal=["TODAS"]   
+        #nro_sucursal=nro_sucursal.append(resultado['nro_sucursal'].values.tolist())
     except:
         sucursal=[]
-     
+        #nro_sucursal=[]
+        
+    print("sucu",sucursal)
     return JsonResponse({
+        #'numero_sucursal': nro_sucursal,
         'sucursal': sucursal,
         
     })

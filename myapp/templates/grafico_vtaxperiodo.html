@@ -37,7 +37,7 @@
     </style>
  
     <script>
-      // Traer empresas,sucursales
+      // Traer empresas
       document.addEventListener("DOMContentLoaded", function() {
         fetch('/get_empresas_data')
           .then(response => response.json())
@@ -68,18 +68,56 @@
           const dropdownItem = document.createElement('option');
           dropdownItem.text=entry;
           dropdownItem.value = data.codigo_empresa[index];
-          //dropdownItem.dataset.id = entry.codigo;
           dropdown.appendChild(dropdownItem);
           index=index+1
         });
-
-        
         
 
       }
 
 
     </script>
+
+<script>
+  // Traer sucursales
+
+  // Function to populate the dropdown
+  function populateSucursales() {
+    
+    const dropdown_empres = document.getElementById('empresaslist');
+    
+    fetch('/get_sucursales_data'+'?'+new URLSearchParams({
+                  empresa_seleccionada: dropdown_empres.value,
+              }))
+
+    .then(response => response.json())
+    .then(data => populateDropdownSucursales(data))
+    .catch(error => console.log('Error fetching data:', error));
+
+               
+  }
+
+  function populateDropdownSucursales(data){
+    const dropdown = document.getElementById('sucursaleslist');
+    dropdown.innerHTML = "";
+    const sucursalArray = data.sucursal;
+    
+    console.log(sucursalArray);
+    
+    sucursalArray.forEach(entry => {
+      const dropdownItem = document.createElement('option');
+      dropdownItem.text=entry;
+      //dropdownItem.value = data.numero_sucursal;
+      dropdown.appendChild(dropdownItem);
+      
+    });
+
+  }
+  
+
+
+</script>
+
 
 
 </head>
@@ -131,7 +169,7 @@
             <div class="col-md-3">
               <div class="dropdown">
                 <label for="dropempresas" class="form-label">Empresa:</label>
-                <select class="form-select" id="empresaslist" name="dropempresas" style="width: 250px;">
+                <select class="form-select" id="empresaslist" name="dropempresas" style="width: 250px;" onchange="populateSucursales()">
                   <!-- Options will be populated here -->
               </select>
             </div> 
@@ -139,9 +177,9 @@
             
               <div class="dropdown">
                 <label for="dropsucursales" class="form-label">Sucursal:</label>
-                <select class="form-select" id="sucursaleslist" name="dropsucursales" style="width: 250px;">
-                  <!-- Options will be populated here -->
-              </select>
+                <select class="form-select" id="sucursaleslist" name="dropsucursales" style="width: 250px;" >
+                  
+                </select>
             </div> 
 
           </div>
