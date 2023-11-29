@@ -37,6 +37,121 @@
     </style>
 
 
+<script>
+  // Traer empresas
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('/get_empresas_data')
+      .then(response => response.json())
+      .then(data => populateDropdown(data))
+      .catch(error => console.log('Error fetching data:', error));
+
+    // fetch('/get_sucursales_data')
+    //   .then(response => response.json())
+    //   .then(data => populatetextbox(data))
+    //   .catch(error => console.log('Error fetching data:', error));
+  });
+
+  // Function to populate the dropdown
+  function populateDropdown(data) {
+    const dropdown = document.getElementById('empresaslist');
+    const empresaArray = data.empresa;
+    //agregar la opcion TODOS
+    const dropdownItemTodos = document.createElement('option');
+    dropdownItemTodos.text="TODAS";
+    dropdownItemTodos.value = "TODAS";
+    dropdown.appendChild(dropdownItemTodos);
+
+    //Si empresas empieza con TODAS, sucursales tambien
+    const dropdownsucursales = document.getElementById('sucursaleslist');
+    dropdownsucursales.innerHTML = "";
+    
+    const dropdownItem = document.createElement('option');
+    dropdownItem.text="TODAS";
+    dropdownItem.value ="TODAS";
+    dropdownsucursales.appendChild(dropdownItem);
+
+    console.log(empresaArray);
+    //0=Todas
+    index=0
+
+    empresaArray.forEach(entry => {
+      const dropdownItem = document.createElement('option');
+      dropdownItem.text=entry;
+      dropdownItem.value = data.codigo_empresa[index];
+      dropdown.appendChild(dropdownItem);
+      index=index+1
+    });
+    
+
+  }
+
+
+</script>
+
+<script>
+  // Traer sucursales
+
+  // Function to populate the dropdown
+  function populateSucursales() {
+
+  const dropdown_empres = document.getElementById('empresaslist');
+  //alert(dropdown_empres.value)
+
+  //Si empresas es TODAS, sucursales deberia ser TODAS tambien
+
+  if (dropdown_empres.value=="TODAS")
+  {
+    const dropdown = document.getElementById('sucursaleslist');
+    dropdown.innerHTML = "";
+
+    const dropdownItem = document.createElement('option');
+    dropdownItem.text="TODAS";
+    dropdownItem.value ="TODAS";
+    dropdown.appendChild(dropdownItem);
+    
+  }
+  else
+  {
+    fetch('/get_sucursales_data'+'?'+new URLSearchParams({
+                empresa_seleccionada: dropdown_empres.value,
+            }))
+
+    .then(response => response.json())
+    .then(data => populateDropdownSucursales(data))
+    .catch(error => console.log('Error fetching data:', error));
+
+  }
+
+            
+  }
+
+  function populateDropdownSucursales(data){
+  const dropdown = document.getElementById('sucursaleslist');
+  dropdown.innerHTML = "";
+
+  const sucursalnombres_Array=data.sucursal;
+  const sucursalcodigos_Array=data.numero_sucursal;
+
+  for (let i = 0; i < sucursalnombres_Array.length; i++) {
+          const dropdownItem = document.createElement('option');
+          dropdownItem.text=sucursalnombres_Array[i];
+          dropdownItem.value = sucursalcodigos_Array[i];
+          dropdown.appendChild(dropdownItem);
+    }
+
+  //console.log(sucursalnombres_Array);
+
+
+
+  }
+
+
+
+</script>
+
+
+
+
 </head>
 <body>
 
@@ -79,6 +194,31 @@
             </div>
           </div>   
 
+
+          <div class="container mt-5">
+
+            <div class="row"> 
+                
+              <div class="col-md-3">
+                <div class="dropdown">
+                  <label for="dropempresas" class="form-label">Empresa:</label>
+                  <select class="form-select" id="empresaslist" name="dropempresas" style="width: 250px;" onchange="populateSucursales()">
+                    <!-- Options will be populated here -->
+                </select>
+              </div> 
+  
+              
+                <div class="dropdown">
+                  <label for="dropsucursales" class="form-label">Sucursal:</label>
+                  <select class="form-select" id="sucursaleslist" name="dropsucursales" style="width: 250px;" >
+                    
+                  </select>
+              </div> 
+  
+            </div>
+  
+          </div>  
+  
 
         <div class="container mt-5">
           <div class="row">
@@ -148,10 +288,16 @@
           
           // The Endpoint URL
           let url = '/get_vtaxvend_data/';
+          //dropdown empresas
+          dropdown_emp = document.getElementById('empresaslist');
+          dropdown_suc = document.getElementById('sucursaleslist');
           fetch(url+'?'+new URLSearchParams({
                   from_date: $('#fromDate').val(),
                   to_date: $('#toDate').val(),
+                  empresa_seleccionada: dropdown_emp.value,
+                  sucursal_seleccionada: dropdown_suc.value,
               }))
+
           .then(function(response) {
             // Render the Response Status
             //document.getElementById('result').innerHTML = response.status;

@@ -196,23 +196,49 @@ def get_vtaxvend_data(request):
     desde = request.GET.get('from_date')  # Get the "desde" date from the query parameters
     hasta = request.GET.get('to_date')  # Get the "hasta" date from the query parameters
 
+    empresa_elegida=request.GET.get('empresa_seleccionada')
+    sucursal_elegida=request.GET.get('sucursal_seleccionada')
+
 
     FechaDesde=str(desde)
     FechaHasta=str(hasta)
     
     print(type(desde))
     print(desde)
-
+    print(empresa_elegida)
     
     FechaDesde=convert_date_format(desde)
     FechaHasta=convert_date_format(hasta) 
     
+    if empresa_elegida=="TODAS":
+        selecttext = "SELECT VEVEAA.dat_nombre AS Vend, SUM(IMP_TOTAL*DAT_SIGNO*IMP_PARIPESO) AS Total FROM VETOAA"
+        selecttext += " JOIN VEVEAA on cod_codigo=cod_vendedor"
+        selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
+        selecttext += " and VEVEAA.dat_vercam=1"
+        selecttext += " GROUP BY dat_nombre"
 
-    selecttext = "SELECT VEVEAA.dat_nombre AS Vend, SUM(IMP_TOTAL*DAT_SIGNO*IMP_PARIPESO) AS Total FROM VETOAA"
-    selecttext += " INNER JOIN VEVEAA on cod_codigo=cod_vendedor"
-    selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
-    selecttext += " and dat_vercam=1"
-    selecttext += " GROUP BY dat_nombre"
+    elif empresa_elegida!="TODAS" and sucursal_elegida!="TODAS":
+        #Empresa y sucursal especifica
+        selecttext = "SELECT VEVEAA.dat_nombre AS Vend, SUM(IMP_TOTAL*DAT_SIGNO*IMP_PARIPESO) AS Total FROM VETOAA"
+        selecttext += " JOIN VEVEAA on cod_codigo=cod_vendedor"
+        selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa"
+        selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
+        selecttext += " and VEVEAA.dat_vercam=1"
+        selecttext += " and VETOAA.cod_empresa='"+empresa_elegida+"'"
+        selecttext += " and GZSUAA.nro_sucursal='"+sucursal_elegida+"'"
+        selecttext += " GROUP BY dat_nombre"
+
+    
+    elif empresa_elegida!="TODAS" and sucursal_elegida=="TODAS":
+        #Empresa especifica, todas las sucursales
+        selecttext = "SELECT VEVEAA.dat_nombre AS Vend, SUM(IMP_TOTAL*DAT_SIGNO*IMP_PARIPESO) AS Total FROM VETOAA"
+        selecttext += " JOIN VEVEAA on cod_codigo=cod_vendedor"
+        selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa"
+        selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
+        selecttext += " and VEVEAA.dat_vercam=1"
+        selecttext += " and VETOAA.cod_empresa='"+empresa_elegida+"'"
+        selecttext += " GROUP BY dat_nombre"
+
 
     resultado=informix_query(selecttext)
 
