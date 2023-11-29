@@ -55,10 +55,19 @@
         const dropdown = document.getElementById('empresaslist');
         const empresaArray = data.empresa;
         //agregar la opcion TODOS
-        //const dropdownItemTodos = document.createElement('option');
-        //dropdownItemTodos.text="TODOS";
-        //dropdownItemTodos.value = "TODOS";
-        //dropdown.appendChild(dropdownItemTodos);
+        const dropdownItemTodos = document.createElement('option');
+        dropdownItemTodos.text="TODAS";
+        dropdownItemTodos.value = "TODAS";
+        dropdown.appendChild(dropdownItemTodos);
+
+        //Si empresas empieza con TODAS, sucursales tambien
+        const dropdownsucursales = document.getElementById('sucursaleslist');
+        dropdownsucursales.innerHTML = "";
+        
+        const dropdownItem = document.createElement('option');
+        dropdownItem.text="TODAS";
+        dropdownItem.value ="TODAS";
+        dropdownsucursales.appendChild(dropdownItem);
 
         console.log(empresaArray);
         //0=Todas
@@ -85,15 +94,33 @@
   function populateSucursales() {
     
     const dropdown_empres = document.getElementById('empresaslist');
-    
-    fetch('/get_sucursales_data'+'?'+new URLSearchParams({
+    //alert(dropdown_empres.value)
+
+    //Si empresas es TODAS, sucursales deberia ser TODAS tambien
+
+    if (dropdown_empres.value=="TODAS")
+    {
+      const dropdown = document.getElementById('sucursaleslist');
+      dropdown.innerHTML = "";
+
+      const dropdownItem = document.createElement('option');
+      dropdownItem.text="TODAS";
+      dropdownItem.value ="TODAS";
+      dropdown.appendChild(dropdownItem);
+      
+    }
+    else
+    {
+      fetch('/get_sucursales_data'+'?'+new URLSearchParams({
                   empresa_seleccionada: dropdown_empres.value,
               }))
 
-    .then(response => response.json())
-    .then(data => populateDropdownSucursales(data))
-    .catch(error => console.log('Error fetching data:', error));
+      .then(response => response.json())
+      .then(data => populateDropdownSucursales(data))
+      .catch(error => console.log('Error fetching data:', error));
 
+    }
+    
                
   }
 

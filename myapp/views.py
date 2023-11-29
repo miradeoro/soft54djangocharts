@@ -256,15 +256,34 @@ def get_vtaxperiodo_data(request):
     FechaDesde=convert_date_format(desde)
     FechaHasta=convert_date_format(hasta) 
     
+    if empresa_elegida=="TODAS":
+        selecttext = "SELECT  YEAR(fec_fechacompro)||'/'||LPAD(MONTH(fec_fechacompro),2,'0')  AS MesAno, SUM(VETOAA.imp_total*VETOAA.dat_signo*VETOAA.imp_paripeso) AS Total"
+        selecttext += " FROM VETOAA"
+        selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa"
+        selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
+        selecttext += " GROUP BY  1"
+        selecttext += " ORDER BY 1"
 
-    selecttext = "SELECT  YEAR(fec_fechacompro)||'/'||LPAD(MONTH(fec_fechacompro),2,'0')  AS MesAno, SUM(VETOAA.imp_total*VETOAA.dat_signo*VETOAA.imp_paripeso) AS Total"
-    selecttext += " FROM VETOAA"
-    selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa"
-    selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
-    selecttext += " and VETOAA.cod_empresa='"+empresa_elegida+"'"
-    selecttext += " and GZSUAA.nro_sucursal='"+sucursal_elegida+"'"
-    selecttext += " GROUP BY  1"
-    selecttext += " ORDER BY 1"
+    elif empresa_elegida!="TODAS" and sucursal_elegida!="TODAS":
+        #Empresa y sucursal especifica
+        selecttext = "SELECT  YEAR(fec_fechacompro)||'/'||LPAD(MONTH(fec_fechacompro),2,'0')  AS MesAno, SUM(VETOAA.imp_total*VETOAA.dat_signo*VETOAA.imp_paripeso) AS Total"
+        selecttext += " FROM VETOAA"
+        selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa"
+        selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
+        selecttext += " and VETOAA.cod_empresa='"+empresa_elegida+"'"
+        selecttext += " and GZSUAA.nro_sucursal='"+sucursal_elegida+"'"
+        selecttext += " GROUP BY  1"
+        selecttext += " ORDER BY 1"
+    
+    elif empresa_elegida!="TODAS" and sucursal_elegida=="TODAS":
+        #Empresa especifica, todas las sucursales
+        selecttext = "SELECT  YEAR(fec_fechacompro)||'/'||LPAD(MONTH(fec_fechacompro),2,'0')  AS MesAno, SUM(VETOAA.imp_total*VETOAA.dat_signo*VETOAA.imp_paripeso) AS Total"
+        selecttext += " FROM VETOAA"
+        selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa"
+        selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
+        selecttext += " and VETOAA.cod_empresa='"+empresa_elegida+"'"
+        selecttext += " GROUP BY  1"
+        selecttext += " ORDER BY 1"
 
     resultado=informix_query(selecttext)
 
@@ -335,15 +354,9 @@ def get_empresas_data(request):
 
     try:
         #print(resultado)
-        #opcion TODAS
-        empresa=["TODAS"]
         
         cod_empresa=resultado['cod_ce_empresa'].values.tolist()
-        resultado=resultado['dat_ce_razonsocial'].values.tolist()
-
-        for emp in resultado:
-            empresa.append(emp)
-        
+        empresa=resultado['dat_ce_razonsocial'].values.tolist()
 
     except:
         empresa=[]
