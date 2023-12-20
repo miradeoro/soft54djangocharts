@@ -436,7 +436,7 @@ def get_sucursales_data(request):
     selecttext = "SELECT GZSUAA.nro_sucursal,DAT_EMPRESA FROM GZSUAA"
     selecttext +=" INNER JOIN GZEMAA on GZSUAA.cod_ce_empresa=GZEMAA.cod_ce_empresa "
     selecttext +=" WHERE GZEMAA.cod_ce_empresa='"+empresa_elegida+"' and GZSUAA.dat_vercam='1'"
-    
+    selecttext +=" ORDER BY GZSUAA.nro_sucursal"
 
     resultado=informix_query(selecttext)
 
