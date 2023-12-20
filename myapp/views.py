@@ -225,7 +225,7 @@ def get_vtaxvend_data(request):
         selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
         selecttext += " and VEVEAA.dat_vercam=1"
         selecttext += " and VETOAA.cod_empresa='"+empresa_elegida+"'"
-        selecttext += " and GZSUAA.nro_sucursal='"+sucursal_elegida+"'"
+        selecttext += " and VETOAA.cod_sucursal='"+sucursal_elegida+"'"
         selecttext += " GROUP BY dat_nombre"
 
     
@@ -297,9 +297,11 @@ def get_vtaxperiodo_data(request):
         selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa"
         selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
         selecttext += " and VETOAA.cod_empresa='"+empresa_elegida+"'"
-        selecttext += " and GZSUAA.nro_sucursal='"+sucursal_elegida+"'"
+        selecttext += " and VETOAA.cod_sucursal='"+sucursal_elegida+"'"
         selecttext += " GROUP BY  1"
         selecttext += " ORDER BY 1"
+
+        
     
     elif empresa_elegida!="TODAS" and sucursal_elegida=="TODAS":
         #Empresa especifica, todas las sucursales
@@ -360,7 +362,7 @@ def get_vtaxdia_data(request):
         selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa"
         selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
         selecttext += " and VETOAA.cod_empresa='"+empresa_elegida+"'"
-        selecttext += " and GZSUAA.nro_sucursal='"+sucursal_elegida+"'"
+        selecttext += " and VETOAA.cod_sucursal='"+sucursal_elegida+"'"
         selecttext += " GROUP BY VETOAA.fec_fechacompro"
         selecttext += " ORDER BY 1"
         
