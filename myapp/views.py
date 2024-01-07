@@ -855,7 +855,7 @@ def charts_vtaxperiodo_home(request):
     return render(request, 'grafico_vtaxperiodo.html')
 
 
-def chart_dynamic_graph(request):
+def get_vtaxmediopago_data(request):
 
     FechaDesde="06/01/2023"
     FechaHasta="07/23/2023"

@@ -30,7 +30,7 @@ urlpatterns = [
     path('charts/rankingxcliente', charts_rankingxcliente_home, name='charting_rankingxcliente'),
     path('get_rankingxcliente_data/', get_rankingxcliente_data, name='get_rankingxcliente_data'),
     
-    path('get_sales_data/', chart_dynamic_graph, name='get_sales_data2'),
+    path('get_vtaxmediopago_data/', get_vtaxmediopago_data, name='get_sales_data2'),
     path('get_vtaxvend_data/', get_vtaxvend_data, name='get_vtaxvend_data'),
     path('get_vtaxperiodo_data/', get_vtaxperiodo_data, name='get_vtaxperiodo_data'),
     path('get_listadosaldos_data/', get_listadosaldos_data, name='get_vtaxperiodo_data'),
