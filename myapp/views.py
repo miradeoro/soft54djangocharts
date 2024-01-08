@@ -587,18 +587,20 @@ def get_rankingxcliente_data(request):
     #TODOS los vendedores o uno especifico
     if vendedor_param=="TODOS":
         
-        selecttext = "SELECT FIRST "+limite+" COD_CLIENTE,DAT_RAZONSOCIAL,SUM(IMP_TOTAL*DAT_SIGNO*IMP_PARIPESO) AS FACTURADO"
+        selecttext = "SELECT FIRST "+limite+" COD_CLIENTE,VECLAA.DAT_RAZONSOCIAL,SUM(IMP_TOTAL*DAT_SIGNO*IMP_PARIPESO) AS FACTURADO"
         selecttext += " FROM VETOAA"
-        selecttext += " JOIN veveaa on veveaa.cod_codigo=VETOAA.cod_vendedor"
+        selecttext += " JOIN veclaa on vetoaa.cod_cliente=veclaa.cod_codigo and veclaa.dat_vercam=1"
+        selecttext += " JOIN veveaa on veveaa.cod_codigo=VETOAA.cod_vendedor and veclaa.dat_vercam=1"
         selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
         selecttext += " GROUP BY 1,2"
         selecttext += " ORDER BY 3 DESC"
 
 
     else:     
-        selecttext = "SELECT FIRST "+limite+" COD_CLIENTE,DAT_RAZONSOCIAL,SUM(IMP_TOTAL*DAT_SIGNO*IMP_PARIPESO) AS FACTURADO"
+        selecttext = "SELECT FIRST "+limite+" COD_CLIENTE,VECLAA.DAT_RAZONSOCIAL,SUM(IMP_TOTAL*DAT_SIGNO*IMP_PARIPESO) AS FACTURADO"
         selecttext += " FROM VETOAA"
-        selecttext += " JOIN veveaa on veveaa.cod_codigo=VETOAA.cod_vendedor"
+        selecttext += " JOIN veclaa on vetoaa.cod_cliente=veclaa.cod_codigo and veclaa.dat_vercam=1"
+        selecttext += " JOIN veveaa on veveaa.cod_codigo=VETOAA.cod_vendedor and veclaa.dat_vercam=1"
         selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
         selecttext += " AND veveaa.dat_nombre='"+str(vendedor_param)+"'"
         selecttext += " GROUP BY 1,2"
