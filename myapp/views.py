@@ -335,8 +335,8 @@ def get_vtaxdia_data(request):
     FechaDesde="06/01/2023"
     FechaHasta="07/23/2023"
 
-    desde = request.GET.get('from_date')  # Get the "desde" date from the query parameters
-    hasta = request.GET.get('to_date')  # Get the "hasta" date from the query parameters
+    desde = request.GET.get('from_date') 
+    hasta = request.GET.get('to_date')  
     empresa_elegida=request.GET.get('empresa_seleccionada')
     sucursal_elegida=request.GET.get('sucursal_seleccionada')
 
@@ -347,6 +347,7 @@ def get_vtaxdia_data(request):
     FechaDesde=convert_date_format(desde)
     FechaHasta=convert_date_format(hasta) 
     
+
 
     if empresa_elegida=="TODAS":
         selecttext = "SELECT  VETOAA.fec_fechacompro as Fecha, sum(VETOAA.imp_total*VETOAA.dat_signo*VETOAA.imp_paripeso) AS Importe"
