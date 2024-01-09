@@ -221,7 +221,7 @@ def get_vtaxvend_data(request):
         #Empresa y sucursal especifica
         selecttext = "SELECT VEVEAA.dat_nombre AS Vend, SUM(IMP_TOTAL*DAT_SIGNO*IMP_PARIPESO) AS Total FROM VETOAA"
         selecttext += " JOIN VEVEAA on cod_codigo=cod_vendedor"
-        selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa"
+        selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa and GZSUAA.nro_sucursal=VETOAA.cod_sucursal"
         selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
         selecttext += " and VEVEAA.dat_vercam=1"
         selecttext += " and VETOAA.cod_empresa='"+empresa_elegida+"'"
