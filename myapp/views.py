@@ -365,7 +365,7 @@ def get_vtaxdia_data(request):
         #Empresa y sucursal especifica
         selecttext = "SELECT  VETOAA.fec_fechacompro as Fecha, sum(VETOAA.imp_total*VETOAA.dat_signo*VETOAA.imp_paripeso) AS Importe"
         selecttext += " FROM VETOAA"
-        selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa"
+        selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa AND GZSUAA.nro_sucursal=VETOAA.cod_sucursal"
         selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
         selecttext += " and VETOAA.cod_empresa='"+empresa_elegida+"'"
         selecttext += " and VETOAA.cod_sucursal='"+sucursal_elegida+"'"
@@ -377,7 +377,7 @@ def get_vtaxdia_data(request):
         #Empresa especifica, todas las sucursales
         selecttext = "SELECT  VETOAA.fec_fechacompro as Fecha, sum(VETOAA.imp_total*VETOAA.dat_signo*VETOAA.imp_paripeso) AS Importe"
         selecttext += " FROM VETOAA"
-        selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa"
+        selecttext += " JOIN GZSUAA ON GZSUAA.cod_ce_empresa=VETOAA.cod_empresa AND GZSUAA.nro_sucursal=VETOAA.cod_sucursal"
         selecttext += " WHERE dat_tipcon='zzz' and (VETOAA.fec_fechacompro>='"+ FechaDesde  +"' and VETOAA.fec_fechacompro<='"+FechaHasta+"')"
         selecttext += " and VETOAA.cod_empresa='"+empresa_elegida+"'"
         selecttext += " GROUP BY VETOAA.fec_fechacompro"
