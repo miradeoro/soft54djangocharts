@@ -873,6 +873,9 @@ def get_vtaxmediopago_data(request):
     desde = request.GET.get('from_date')  # Get the "desde" date from the query parameters
     hasta = request.GET.get('to_date')  # Get the "hasta" date from the query parameters
 
+    empresa_elegida=request.GET.get('empresa_seleccionada')
+    sucursal_elegida=request.GET.get('sucursal_seleccionada')
+
 
     FechaDesde=str(desde)
     FechaHasta=str(hasta)
@@ -880,17 +883,42 @@ def get_vtaxmediopago_data(request):
     print(type(desde))
     print(desde)
 
+    print(empresa_elegida)
+    print(sucursal_elegida)
+
+
     
     FechaDesde=convert_date_format(desde)
     FechaHasta=convert_date_format(hasta) 
     
-    
-    selecttext = "SELECT VETCAA.dat_tipo AS MEDIOPAGO, SUM(VETCAA.imp_total*VETCAA.dat_signo*VETCAA.imp_paripeso) AS Total FROM VETCAA"
-    selecttext += " INNER JOIN GZEMAA on VETCAA.cod_ce_empresa=GZEMAA.cod_ce_empresa and gzemaa.dat_vercam=1"
-    selecttext += " WHERE VETCAA.dat_tipo<>'ZZZ' and (VETCAA.fec_fechacompro>='"+ FechaDesde  +"' and VETCAA.fec_fechacompro<='"+FechaHasta+"')"
-    selecttext += " and GZEMAA.dat_ce_razonsocial='"+Empresa+"'"
-    selecttext += " GROUP BY VETCAA.DAT_TIPO"
+    if empresa_elegida=="TODAS" and sucursal_elegida=="TODAS":
+        selecttext = "SELECT VETCAA.dat_tipo AS MEDIOPAGO, SUM(VETCAA.imp_total*VETCAA.dat_signo*VETCAA.imp_paripeso) AS Total FROM VETCAA"
+        #selecttext += " INNER JOIN GZEMAA on VETCAA.cod_ce_empresa=GZEMAA.cod_ce_empresa and gzemaa.dat_vercam=1"
+        selecttext += " WHERE VETCAA.dat_tipo<>'ZZZ' and (VETCAA.fec_fechacompro>='"+ FechaDesde  +"' and VETCAA.fec_fechacompro<='"+FechaHasta+"')"
+        selecttext += " GROUP BY VETCAA.DAT_TIPO"
 
+
+    elif empresa_elegida!="TODAS" and sucursal_elegida!="TODAS":
+        #Empresa y sucursal especifica
+        print("yeah")
+        selecttext = "SELECT VETCAA.dat_tipo AS MEDIOPAGO, SUM(VETCAA.imp_total*VETCAA.dat_signo*VETCAA.imp_paripeso) AS Total FROM VETCAA"
+        #selecttext += " INNER JOIN GZEMAA on VETCAA.cod_ce_empresa=GZEMAA.cod_ce_empresa and gzemaa.dat_vercam=1"
+        selecttext += " WHERE VETCAA.dat_tipo<>'ZZZ' and (VETCAA.fec_fechacompro>='"+ FechaDesde  +"' and VETCAA.fec_fechacompro<='"+FechaHasta+"')"
+        selecttext += " and VETCAA.cod_ce_empresa='"+empresa_elegida+"'"
+        selecttext += " and VETCAA.cod_sucursal='"+sucursal_elegida+"'"
+        selecttext += " GROUP BY VETCAA.DAT_TIPO"
+
+    
+    elif empresa_elegida!="TODAS" and sucursal_elegida=="TODAS":
+        #Empresa especifica, todas las sucursales
+        selecttext = "SELECT VETCAA.dat_tipo AS MEDIOPAGO, SUM(VETCAA.imp_total*VETCAA.dat_signo*VETCAA.imp_paripeso) AS Total FROM VETCAA"
+        #selecttext += " INNER JOIN GZEMAA on VETCAA.cod_ce_empresa=GZEMAA.cod_ce_empresa and gzemaa.dat_vercam=1"
+        selecttext += " WHERE VETCAA.dat_tipo<>'ZZZ' and (VETCAA.fec_fechacompro>='"+ FechaDesde  +"' and VETCAA.fec_fechacompro<='"+FechaHasta+"')"
+        selecttext += " and VETCAA.cod_ce_empresa='"+empresa_elegida+"'"
+        selecttext += " GROUP BY VETCAA.DAT_TIPO"
+
+
+    print(selecttext)
     resultado=informix_query(selecttext)
 
     try:
